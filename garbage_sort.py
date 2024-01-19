@@ -1,13 +1,12 @@
 import argparse
 from pathlib import Path
-from shutil import copyfile
+from shutil import copyfile, rmfile
 from threading import Thread
 import logging
 
 
 """
-py garbage_sort.py --source -s garbage
-py garbage_sort.py --output -o dict
+py garbage_sort.py --source garbage
 """
 
 parser = argparse.ArgumentParser(description='app for sorting folder')
@@ -55,4 +54,9 @@ if __name__ == '__main__':
         threads.append(th)
 
     [th.join() for th in threads]
-    print('можна видалити початкову папку')
+
+    try:
+        rmtree(base_folder)
+        print(f'Папка {base_folder} видалена')
+    except Exception as e:
+        logging.error(f'Помилка при видаленні папки {base_folder}: {e}')
